@@ -1,0 +1,486 @@
+.dashboard {
+  width: 100%;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  margin: 0 0 0.5rem 0;
+  color: var(--color-text);
+  font-size: 2rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  position: relative;
+  animation: fadeInDown 0.5s ease-out;
+}
+
+.dashboard-subtitle {
+  margin: 0;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+  font-family: var(--font-family);
+}
+
+/* Style-specific title styling */
+.app[data-ambiance="atelier-architecture"] .dashboard-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.app[data-ambiance="art-gallery"] .dashboard-title {
+  font-family: var(--font-heading);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+
+.app[data-ambiance="academic-critique"] .dashboard-title {
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 0.5rem;
+}
+
+.app[data-ambiance="enterprise-dashboard"] .dashboard-title {
+  color: var(--color-primary);
+}
+
+.app[data-ambiance="collaborative-workspace"] .dashboard-title {
+  color: var(--color-accent);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Architectural grid overlay */
+.architectural-grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-line {
+  position: absolute;
+  background: rgba(230, 164, 30, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.grid-line.horizontal {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.grid-line.vertical {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.app[data-ambiance="atelier-architecture"] .architectural-grid-overlay .grid-line {
+  opacity: 0.3;
+}
+
+/* Gallery controls */
+.gallery-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.gallery-filter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-light);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+}
+
+.gallery-view-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover, .view-btn.active {
+  background: var(--color-secondary);
+  border-color: var(--color-accent);
+}
+
+/* Annotation toolbar */
+.annotation-toolbar {
+  position: sticky;
+  top: 20px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--color-card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tool-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tool-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool-btn:hover, .tool-btn.active {
+  background: var(--color-accent);
+  color: white;
+  border-color: var(--color-accent);
+  transform: scale(1.1);
+}
+
+/* Enterprise controls */
+.enterprise-controls {
+  margin-bottom: 2rem;
+}
+
+.data-filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.filter-select, .date-filter {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-card-bg);
+  color: var(--color-text);
+}
+
+.export-btn {
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Collaborative status */
+.collaboration-status {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--color-accent);
+}
+
+.online-users {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.user-avatar.online::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background: #28a745;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.online-count {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+.activity-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activity-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.activity-text {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  position: relative;
+}
+
+/* Different grid layouts per style */
+.dashboard-grid-grid-architectural {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.dashboard-grid-masonry-gallery {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.dashboard-grid-annotation-workspace {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-grid-enterprise-analytics {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.dashboard-grid-collaborative-hub {
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.8rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .annotation-toolbar {
+    position: static;
+  }
+
+  .data-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .collaboration-status {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
+/* Additional animations for dashboard */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.dashboard-loading {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    to right,
+    var(--color-card-bg) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    var(--color-card-bg) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Modern Agency - dashboard avec glass morphism */
+.app[data-ambiance="modern-agency"] .dashboard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.app[data-ambiance="modern-agency"] .dashboard-title {
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Corporate Classic - dashboard traditionnel */
+.app[data-ambiance="corporate-classic"] .dashboard {
+  background: #FFFFFF;
+  font-family: 'Georgia', serif;
+}
+
+.app[data-ambiance="corporate-classic"] .dashboard-title {
+  color: #1A365D;
+  font-family: 'Georgia', serif;
+  font-weight: 600;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 0.5rem;
+}
+
+/* Creative Workshop - dashboard organique */
+.app[data-ambiance="creative-workshop"] .dashboard {
+  background: linear-gradient(135deg, #FEFEFE, #F5F5F0);
+}
+
+.app[data-ambiance="creative-workshop"] .dashboard-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #8B4513;
+}
+
+/* Tech Startup - dashboard cyberpunk */
+.app[data-ambiance="tech-startup"] .dashboard {
+  background: linear-gradient(135deg, #0F0F23, #1A1A2E);
+  color: #FFFFFF;
+}
+
+.app[data-ambiance="tech-startup"] .dashboard-title {
+  color: #00FF88;
+  font-family: 'JetBrains Mono', monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* Academic Library - dashboard érudit */
+.app[data-ambiance="academic-library"] .dashboard {
+  background: linear-gradient(135deg, #F5F5DC, #FAF0E6);
+  font-family: 'Crimson Text', serif;
+}
+
+.app[data-ambiance="academic-library"] .dashboard-title {
+  color: #3D2817;
+  font-family: 'Crimson Text', serif;
+  font-weight: 600;
+  border-bottom: 1px solid #D2B48C;
+  padding-bottom: 0.5rem;
+}
+
+/* Layouts spécifiques pour les nouveaux thèmes */
+.dashboard-grid-agency-projects {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.dashboard-grid-corporate-dashboard {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.dashboard-grid-creative-studio {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+.dashboard-grid-tech-dashboard {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.dashboard-grid-academic-portal {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem;
+}

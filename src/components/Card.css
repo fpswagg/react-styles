@@ -1,0 +1,265 @@
+.card {
+  background-color: var(--color-card-bg);
+  background-image: var(--bg-card-texture);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-card-padding);
+  box-shadow: var(--shadow);
+  transition: transform var(--anim-card-hover-duration) var(--anim-card-hover-easing),
+              box-shadow var(--anim-card-hover-duration) var(--anim-card-hover-easing),
+              opacity 0.3s ease;
+  border: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card hover animations - style specific */
+.card:hover {
+  transform: var(--anim-card-hover);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Studio Grid - architectural style */
+.app[data-ambiance="atelier-architecture"] .card {
+  border: 1px solid var(--color-border);
+}
+
+.app[data-ambiance="atelier-architecture"] .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app[data-ambiance="atelier-architecture"] .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(230, 164, 30, 0.02) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.app[data-ambiance="atelier-architecture"] .card:hover::before {
+  opacity: 1;
+}
+
+/* Portfolio Flow - gallery style */
+.app[data-ambiance="art-gallery"] .card {
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.app[data-ambiance="art-gallery"] .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.app[data-ambiance="art-gallery"] .card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.app[data-ambiance="art-gallery"] .card:hover::after {
+  opacity: 1;
+}
+
+/* Critique Lab - academic style */
+.app[data-ambiance="academic-critique"] .card {
+  background-color: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+}
+
+.app[data-ambiance="academic-critique"] .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-color: var(--color-accent);
+}
+
+/* Admin Studio - enterprise style */
+.app[data-ambiance="enterprise-dashboard"] .card {
+  border: 1px solid var(--color-border);
+}
+
+.app[data-ambiance="enterprise-dashboard"] .card:hover {
+  background-color: rgba(74, 85, 104, 0.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Studio Collab - collaborative style */
+.app[data-ambiance="collaborative-workspace"] .card {
+  border: 1px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app[data-ambiance="collaborative-workspace"] .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 188, 156, 0.15);
+  border-color: var(--color-accent);
+}
+
+.app[data-ambiance="collaborative-workspace"] .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s ease;
+}
+
+.app[data-ambiance="collaborative-workspace"] .card:hover::before {
+  transform: scaleY(1);
+}
+
+/* Modern Agency - cards avec gradients */
+.app[data-ambiance="modern-agency"] .card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.8));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.app[data-ambiance="modern-agency"] .card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Corporate Classic - cards traditionnelles */
+.app[data-ambiance="corporate-classic"] .card {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+}
+
+.app[data-ambiance="corporate-classic"] .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Creative Workshop - cards organiques */
+.app[data-ambiance="creative-workshop"] .card {
+  background: linear-gradient(135deg, #FEFEFE, #F5F5F0);
+  border: 2px solid rgba(139, 69, 19, 0.1);
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.1);
+  border-radius: 12px;
+}
+
+.app[data-ambiance="creative-workshop"] .card:hover {
+  transform: translateY(-6px) rotate(1deg);
+  box-shadow: 0 8px 16px rgba(139, 69, 19, 0.15);
+}
+
+/* Tech Startup - cards cyberpunk */
+.app[data-ambiance="tech-startup"] .card {
+  background: linear-gradient(135deg, #1A1A2E, #16213E);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+  border-radius: 8px;
+  color: #FFFFFF;
+}
+
+.app[data-ambiance="tech-startup"] .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.2), 0 0 60px rgba(0, 212, 255, 0.1);
+  border-color: #00FF88;
+}
+
+/* Academic Library - cards érudites */
+.app[data-ambiance="academic-library"] .card {
+  background: linear-gradient(135deg, #FAF0E6, #F5F5DC);
+  border: 1px solid #D2B48C;
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.08);
+  border-radius: 8px;
+}
+
+.app[data-ambiance="academic-library"] .card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 16px rgba(139, 69, 19, 0.12);
+}
+
+/* Stagger animation for cards */
+.card {
+  animation: fadeInUp 0.5s ease-out backwards;
+}
+
+.card:nth-child(1) { animation-delay: calc(var(--anim-stagger-delay) * 0); }
+.card:nth-child(2) { animation-delay: calc(var(--anim-stagger-delay) * 1); }
+.card:nth-child(3) { animation-delay: calc(var(--anim-stagger-delay) * 2); }
+.card:nth-child(4) { animation-delay: calc(var(--anim-stagger-delay) * 3); }
+.card:nth-child(5) { animation-delay: calc(var(--anim-stagger-delay) * 4); }
+.card:nth-child(6) { animation-delay: calc(var(--anim-stagger-delay) * 5); }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.card-icon {
+  font-size: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.card-title {
+  font-size: 1rem;
+  color: var(--color-text-light);
+  font-weight: 500;
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  font-family: var(--font-heading);
+  transition: color 0.3s ease;
+}
+
+.card:hover .card-value {
+  color: var(--color-accent);
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  margin: 0;
+  font-family: var(--font-family);
+}
