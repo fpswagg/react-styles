@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import Form from './components/Form'
 import Dashboard from './components/Dashboard'
-import { ModernAgencyDashboard } from './components/styles/modern-agency'
-import { CorporateDashboard } from './components/styles/corporate-classic'
-import { CreativeWorkshopDashboard } from './components/styles/creative-workshop'
-import { TechStartupDashboard } from './components/styles/tech-startup'
-import { AcademicLibraryDashboard } from './components/styles/academic-library'
+import { ModernHeritageDashboard } from './components/styles/modern-heritage'
+import { UrbanCanvasDashboard } from './components/styles/urban-canvas'
+import { GalleryPortfolioDashboard } from './components/styles/gallery-portfolio'
+import { TropicalVernacularDashboard } from './components/styles/tropical-vernacular'
+import { HybridModernTraditionDashboard } from './components/styles/hybrid-modern-tradition'
 import { useStyle, STYLES } from './contexts/StyleContext'
 import { useStyleTheme } from './hooks/useStyleTheme'
 import { styleDefinitions } from './styles/styleDefinitions'
@@ -15,6 +15,43 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard')
   const { currentStyle, setCurrentStyle } = useStyle()
   const { cssVars, theme } = useStyleTheme()
+
+  // Rendu dynamique selon le style sélectionné
+  const renderDashboard = () => {
+    try {
+      switch (currentStyle) {
+        case STYLES.MODERN_HERITAGE:
+          return <ModernHeritageDashboard />
+        case STYLES.URBAN_CANVAS:
+          return <UrbanCanvasDashboard />
+        case STYLES.GALLERY_PORTFOLIO:
+          return <GalleryPortfolioDashboard />
+        case STYLES.TROPICAL_VERNACULAR:
+          return <TropicalVernacularDashboard />
+        case STYLES.HYBRID_MODERN_TRADITION:
+          return <HybridModernTraditionDashboard />
+        default:
+          return <Dashboard />
+      }
+    } catch (error) {
+      console.error('Error rendering dashboard:', error)
+      return (
+        <div style={{ padding: '2rem', color: 'red' }}>
+          <h2>Error loading dashboard</h2>
+          <p>{error.message}</p>
+          <p>Current style: {currentStyle}</p>
+        </div>
+      )
+    }
+  }
+
+  if (!theme || !cssVars) {
+    return (
+      <div style={{ padding: '2rem' }}>
+        <h2>Loading...</h2>
+      </div>
+    )
+  }
 
   return (
     <div className="app" style={cssVars} data-ambiance={theme.ambiance}>
@@ -26,15 +63,12 @@ function App() {
           >
             Dashboard
           </button>
-          {/* Masquer le bouton Form pour les nouveaux styles spéciaux */}
-          {!Object.values([STYLES.MODERN_AGENCY, STYLES.CORPORATE_CLASSIC, STYLES.CREATIVE_WORKSHOP, STYLES.TECH_STARTUP, STYLES.ACADEMIC_LIBRARY]).includes(currentStyle) && (
-            <button
-              className={currentView === 'form' ? 'active' : ''}
-              onClick={() => setCurrentView('form')}
-            >
-              Form
-            </button>
-          )}
+          <button
+            className={currentView === 'form' ? 'active' : ''}
+            onClick={() => setCurrentView('form')}
+          >
+            Form
+          </button>
         </div>
         <div className="app-nav-right">
           <label htmlFor="style-selector" className="style-label">
@@ -56,7 +90,7 @@ function App() {
       </nav>
 
       <main className="app-main">
-        {currentView === 'dashboard' ? <Dashboard /> : <Form />}
+        {currentView === 'dashboard' ? renderDashboard() : <Form />}
       </main>
     </div>
   )
