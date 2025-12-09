@@ -92,12 +92,29 @@ const TropicalVernacularDashboard = () => {
           >
             {/* Hero */}
             <div className="vernacular-hero">
-              <div className="hero-image">
-                <img src="/api/placeholder/1200/600" alt="Architecture vernaculaire marocaine" />
-              </div>
-              <div className="hero-content">
-                <h2>L'Excellence des Savoir-Faire Locaux</h2>
-                <p>Redécouvrir les matériaux et techniques traditionnelles pour un avenir durable.</p>
+              <div className="hero-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=1200&h=600&fit=crop" 
+                  alt="Architecture vernaculaire marocaine"
+                  loading="eager"
+                  className="hero-bg-image"
+                />
+                <div className="hero-text-container">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    L'Excellence des Savoir-Faire Locaux
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                  >
+                    Redécouvrir les matériaux et techniques traditionnelles pour un avenir durable.
+                  </motion.p>
+                </div>
               </div>
             </div>
 
@@ -115,7 +132,7 @@ const TropicalVernacularDashboard = () => {
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="material-texture">
-                      <img src={`/api/placeholder/200/150`} alt={`Texture ${material.name}`} />
+                      <img src={`https://images.unsplash.com/photo-1581888227599-779811939961?w=200&h=150&fit=crop`} alt={`Texture ${material.name}`} />
                     </div>
                     <div className="material-info">
                       <h4>{material.name}</h4>
@@ -154,12 +171,10 @@ const TropicalVernacularDashboard = () => {
                     <h3>{material.name}</h3>
                     <span className="origin-badge">{material.origin}</span>
                   </div>
-
                   <div className="material-content">
                     <div className="material-image">
-                      <img src={`/api/placeholder/300/200`} alt={material.name} />
+                      <img src={`https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=300&h=200&fit=crop`} alt={material.name} />
                     </div>
-
                     <div className="material-details">
                       <div className="properties-section">
                         <h4>Propriétés</h4>
@@ -169,16 +184,14 @@ const TropicalVernacularDashboard = () => {
                           ))}
                         </ul>
                       </div>
-
                       <div className="uses-section">
-                        <h4>Usages</h4>
+                        <h4>Utilisations</h4>
                         <div className="uses-tags">
                           {material.uses.map((use, i) => (
                             <span key={i} className="use-tag">{use}</span>
                           ))}
                         </div>
                       </div>
-
                       <div className="sustainability-section">
                         <h4>Durabilité</h4>
                         <p>{material.sustainability}</p>
@@ -198,7 +211,7 @@ const TropicalVernacularDashboard = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h2>Études de Cas</h2>
+            <h2>Projets Locaux</h2>
             <div className="case-studies">
               {projects.map((project, index) => (
                 <motion.div
@@ -211,110 +224,28 @@ const TropicalVernacularDashboard = () => {
                   <div className="study-comparison">
                     <div className="before-after">
                       <div className="image-container">
-                        <img src={`/api/placeholder/300/200`} alt="Avant" />
+                        <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e4?w=400&h=300&fit=crop" alt="Avant rénovation" />
                         <span className="label">AVANT</span>
                       </div>
                       <div className="image-container">
-                        <img src={`/api/placeholder/300/200`} alt="Après" />
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop" alt="Après rénovation" />
                         <span className="label">APRÈS</span>
                       </div>
                     </div>
                   </div>
-
                   <div className="study-content">
                     <h3>{project.title}</h3>
                     <div className="study-meta">
                       <span className="location">{project.location}</span>
-                      <div className="materials-used">
-                        {project.materials.map((material, i) => (
-                          <span key={i} className="material-tag">{material}</span>
-                        ))}
-                      </div>
+                      <span className="year">2023</span>
                     </div>
-                    <p className="impact">{project.impact}</p>
+                    <p>{project.impact}</p>
+                    <div className="materials-used">
+                      {project.materials.map((material, idx) => (
+                        <span key={idx} className="material-tag">{material}</span>
+                      ))}
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.section>
-        )}
-
-        {activeSection === 'workshops' && (
-          <motion.section
-            className="workshops-section"
-            initial={{ opacity: 0, rotateY: -15 }}
-            animate={{ opacity: 1, rotateY: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2>Ateliers Pratiques</h2>
-            <div className="workshops-grid">
-              {[
-                {
-                  title: 'Construction en Terre Crue',
-                  date: '15-17 Janvier 2025',
-                  level: 'Débutant',
-                  duration: '3 jours'
-                },
-                {
-                  title: 'Charpente Traditionnelle',
-                  date: '22-24 Janvier 2025',
-                  level: 'Intermédiaire',
-                  duration: '3 jours'
-                }
-              ].map((workshop, index) => (
-                <motion.div
-                  key={index}
-                  className="workshop-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <h3>{workshop.title}</h3>
-                  <div className="workshop-meta">
-                    <span className="date">{workshop.date}</span>
-                    <span className="level">{workshop.level}</span>
-                    <span className="duration">{workshop.duration}</span>
-                  </div>
-                  <button className="register-btn">S'inscrire</button>
-                </motion.div>
-              ))}
-            </div>
-          </motion.section>
-        )}
-
-        {activeSection === 'resources' && (
-          <motion.section
-            className="resources-section"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2>Ressources Pédagogiques</h2>
-            <div className="resources-grid">
-              {[
-                { type: 'Guide', title: 'Manuel de Construction Vernaculaire', format: 'PDF' },
-                { type: 'Vidéo', title: 'Techniques de Maçonnerie', format: 'MP4' },
-                { type: 'Quiz', title: 'Test de Connaissances', format: 'Interactif' }
-              ].map((resource, index) => (
-                <motion.div
-                  key={index}
-                  className="resource-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="resource-icon">
-                    {resource.format === 'PDF' ? '📄' :
-                     resource.format === 'MP4' ? '🎥' : '❓'}
-                  </div>
-                  <div className="resource-info">
-                    <h4>{resource.title}</h4>
-                    <span className="resource-type">{resource.type}</span>
-                    <span className="resource-format">{resource.format}</span>
-                  </div>
-                  <button className="download-btn">Accéder</button>
                 </motion.div>
               ))}
             </div>

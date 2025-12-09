@@ -89,7 +89,7 @@ const GalleryPortfolioDashboard = () => {
             >
               <div className="item-image">
                 <img
-                  src={`/api/placeholder/400/300`}
+                  src={`https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop`}
                   alt={project.title}
                   loading="lazy"
                 />
@@ -136,10 +136,15 @@ const GalleryPortfolioDashboard = () => {
               >
                 ×
               </button>
-              <img src={`/api/placeholder/800/600`} alt="Projet en détail" />
+              <img src={`https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop`} alt="Projet en détail" />
               <div className="lightbox-info">
                 <h3>Projet Détail</h3>
                 <p>Description complète du projet architectural avec ses caractéristiques techniques.</p>
+                <div className="lightbox-meta">
+                  <span>Auteur: Étudiant X</span>
+                  <span>Année: 2024</span>
+                  <span>Matériaux: Pierre, Bois</span>
+                </div>
                 <div className="lightbox-actions">
                   <button className="download-btn">Télécharger HD</button>
                   <button className="share-btn">Partager</button>
@@ -149,23 +154,6 @@ const GalleryPortfolioDashboard = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Upload Section */}
-      <motion.div
-        className="upload-section"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <h2>Soumettre un Projet</h2>
-        <div className="upload-area">
-          <div className="upload-placeholder">
-            <span className="upload-icon">📁</span>
-            <p>Glissez vos images ici ou cliquez pour sélectionner</p>
-            <button className="upload-btn">Parcourir les fichiers</button>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

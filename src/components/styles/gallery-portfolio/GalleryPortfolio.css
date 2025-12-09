@@ -1,10 +1,13 @@
 /* ===== GALLERY PORTFOLIO STYLES ===== */
 
 .gallery-portfolio-container {
-  min-height: 100vh;
+  width: 100%;
+  min-height: calc(100vh - 60px);
   background: #FFFFFF;
   color: #000000;
   font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow-x: hidden;
 }
 
 /* Header */
@@ -13,14 +16,19 @@
   padding: 3rem 2rem 2rem;
   background: #FFFFFF;
   border-bottom: 1px solid #E5E5E5;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .gallery-header h1 {
   font-family: 'SF Pro Display', sans-serif;
-  font-size: 3rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   color: #000000;
   margin-bottom: 0.5rem;
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .gallery-header p {
@@ -94,9 +102,13 @@
   height: 300px;
   background: linear-gradient(135deg, #F0F0F0 0%, #E0E0E0 100%);
   overflow: hidden;
+  min-height: 300px;
 }
 
 .item-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -241,6 +253,14 @@
   margin-bottom: 1.5rem;
 }
 
+.lightbox-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #666666;
+}
+
 .lightbox-actions {
   display: flex;
   gap: 1rem;
@@ -274,67 +294,19 @@
   background: #E0E0E0;
 }
 
-/* Upload Section */
-.upload-section {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-}
-
-.upload-section h2 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.upload-area {
-  border: 2px dashed #E5E5E5;
-  border-radius: 12px;
-  padding: 4rem 2rem;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-
-.upload-area:hover {
-  border-color: #007AFF;
-  background: #F8F9FA;
-}
-
-.upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.upload-icon {
-  font-size: 3rem;
-}
-
-.upload-placeholder p {
-  color: #666666;
-  font-size: 1.1rem;
-}
-
-.upload-btn {
-  background: #007AFF;
-  color: #FFFFFF;
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.upload-btn:hover {
-  background: #0056CC;
-  transform: translateY(-2px);
-}
-
 /* Responsive */
+@media (max-width: 1024px) {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .gallery-header {
+    padding: 2rem 1.5rem 1.5rem;
+  }
+
   .gallery-header h1 {
     font-size: 2rem;
   }
@@ -342,15 +314,25 @@
   .gallery-grid {
     grid-template-columns: 1fr;
     padding: 1rem;
+    gap: 1.5rem;
   }
 
   .gallery-filters {
     padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
   }
 
   .lightbox-content {
     max-width: 95vw;
     max-height: 95vh;
   }
-}
 
+  .item-image {
+    height: 250px;
+  }
+}

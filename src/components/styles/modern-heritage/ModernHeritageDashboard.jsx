@@ -3,35 +3,68 @@ import { motion } from 'framer-motion';
 import './ModernHeritage.css';
 
 const ModernHeritageDashboard = () => {
-  const [activeSection, setActiveSection] = useState('overview');
+  const [activeSection, setActiveSection] = useState('home');
 
-  const projects = [
+  // Sample data based on markdown schema
+  const featuredProjects = [
     {
-      id: 1,
-      title: 'Riad Traditionnel Marrakech',
-      description: 'Rénovation respectueuse d\'un riad historique',
-      image: 'riad-marrakech.jpg',
+      id: '1',
+      title: 'Maison d\'hôtes Dar Essalam',
+      slug: 'dar-essalam',
+      cover: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=500&fit=crop',
+      summary: 'Rénovation d\'une maison traditionnelle en respectant l\'architecture vernaculaire',
       year: 2024,
-      location: 'Marrakech',
-      status: 'Terminé'
+      type: 'Rénovation',
+      location: 'Atlas Mountains',
+      materials: ['Pierre locale', 'Bois de cèdre', 'Zellige'],
+      authors: ['Pr. Ahmed Bennani', 'Étudiants M2']
     },
     {
-      id: 2,
-      title: 'Maison d\'Hôtes Atlas',
-      description: 'Construction bioclimatique en montagne',
-      image: 'maison-atlas.jpg',
-      year: 2024,
-      location: 'Atlas',
-      status: 'En cours'
-    },
-    {
-      id: 3,
+      id: '2',
       title: 'Centre Culturel Fès',
-      description: 'Réhabilitation d\'un monument historique',
-      image: 'centre-fes.jpg',
+      slug: 'centre-culturel-fes',
+      cover: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=500&fit=crop',
+      summary: 'Réhabilitation d\'un monument historique avec intégration d\'espaces contemporains',
       year: 2023,
+      type: 'Réhabilitation',
       location: 'Fès',
-      status: 'Terminé'
+      materials: ['Pierre', 'Béton', 'Verre'],
+      authors: ['Dr. Leila Tazi', 'Étudiants M1']
+    },
+    {
+      id: '3',
+      title: 'École Primaire Tamegroute',
+      slug: 'ecole-tamegroute',
+      cover: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&h=500&fit=crop',
+      summary: 'Construction durable utilisant matériaux locaux et techniques bioclimatiques',
+      year: 2024,
+      type: 'Construction',
+      location: 'Tamegroute',
+      materials: ['Terre', 'Bois local', 'Isolation naturelle'],
+      authors: ['Pr. Mohamed Alaoui', 'Étudiants M2']
+    }
+  ];
+
+  const news = [
+    {
+      id: '1',
+      title: 'Journée Portes Ouvertes 2025',
+      excerpt: 'Découvrez nos programmes et rencontrez nos enseignants',
+      publishedAt: '2024-12-01',
+      category: 'Événements',
+      cover: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=250&fit=crop',
+      tags: ['portes ouvertes', 'admissions'],
+      author: 'Service Communication'
+    },
+    {
+      id: '2',
+      title: 'Prix Aga Khan d\'Architecture',
+      excerpt: 'Un projet étudiant primé pour son approche durable',
+      publishedAt: '2024-11-15',
+      category: 'Récompenses',
+      cover: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=250&fit=crop',
+      tags: ['prix', 'architecture durable'],
+      author: 'Service Communication'
     }
   ];
 
@@ -44,26 +77,28 @@ const ModernHeritageDashboard = () => {
 
   return (
     <div className="modern-heritage-container">
-      {/* Header */}
+      {/* Header - Minimal with logo left, menu hamburger right */}
       <motion.header
         className="heritage-header"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
       >
         <div className="header-content">
-          <h1 className="header-title">ESSACA</h1>
-          <p className="header-subtitle">École Supérieure des Sciences de l'Architecture</p>
-          <div className="header-decoration">
-            <div className="decoration-line"></div>
+          <div className="header-brand">
+            <h1 className="header-title">ESSACA</h1>
+            <p className="header-subtitle">École Supérieure des Sciences de l'Architecture</p>
           </div>
+          <button className="mobile-menu-toggle">
+            <span></span><span></span><span></span>
+          </button>
         </div>
       </motion.header>
 
       {/* Navigation */}
       <nav className="heritage-navigation">
         {[
-          { id: 'overview', label: 'Accueil', icon: '🏛️' },
+          { id: 'home', label: 'Accueil', icon: '🏛️' },
           { id: 'about', label: 'À propos', icon: '📖' },
           { id: 'programs', label: 'Programmes', icon: '🎓' },
           { id: 'projects', label: 'Projets', icon: '🏗️' },
@@ -83,47 +118,64 @@ const ModernHeritageDashboard = () => {
         ))}
       </nav>
 
-      {/* Content */}
+      {/* Main Content */}
       <main className="heritage-content">
-        {activeSection === 'overview' && (
+        {activeSection === 'home' && (
           <motion.section
             className="overview-section"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            {/* Hero */}
+            {/* Hero - Full-width with N&B image + large centered title */}
             <div className="hero-section">
-              <div className="hero-image">
-                <img src="/api/placeholder/1200/600" alt="Architecture marocaine traditionnelle" />
+              <div className="hero-wrapper">
+                <img 
+                  src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1200&h=600&fit=crop" 
+                  alt="Architecture marocaine traditionnelle"
+                  loading="eager"
+                  className="hero-bg-image"
+                />
                 <div className="hero-overlay"></div>
+                <div className="hero-text-container">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                  >
+                    L'Excellence Architecturale
+                  </motion.h2>
+                  <motion.p
+                    className="hero-slogan"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                  >
+                    Depuis 1985, formons les architectes de demain en conciliant tradition et innovation.
+                  </motion.p>
+                  <motion.button
+                    className="cta-button"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.5 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Découvrir nos programmes
+                  </motion.button>
+                </div>
               </div>
-              <div className="hero-content">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  L'Excellence Architecturale
-                </motion.h2>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  Depuis 1985, formons les architectes de demain en conciliant tradition et innovation.
-                </motion.p>
-                <motion.button
-                  className="cta-button"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Découvrir nos programmes
-                </motion.button>
-              </div>
+            </div>
+
+            {/* Mission Section */}
+            <div className="mission-section">
+              <h3>Notre Mission</h3>
+              <p>
+                ESSACA s'engage à former des architectes capables de créer des espaces qui respectent 
+                le patrimoine architectural marocain tout en répondant aux défis contemporains. 
+                Notre approche pédagogique allie rigueur académique, pratique professionnelle et 
+                sensibilité culturelle.
+              </p>
             </div>
 
             {/* Stats */}
@@ -146,11 +198,11 @@ const ModernHeritageDashboard = () => {
               </div>
             </div>
 
-            {/* Featured Projects */}
+            {/* Featured Projects - Cards larges avec vignette et court pitch */}
             <div className="projects-preview">
-              <h3>Projets emblématiques</h3>
+              <h3>Projets à la une</h3>
               <div className="projects-grid">
-                {projects.slice(0, 3).map((project, index) => (
+                {featuredProjects.map((project, index) => (
                   <motion.div
                     key={project.id}
                     className="project-card-large"
@@ -159,30 +211,20 @@ const ModernHeritageDashboard = () => {
                     transition={{ delay: index * 0.1 }}
                     whileHover={{ scale: 1.02 }}
                   >
-                    <div className="project-image">
-                      <img src={`/api/placeholder/400/250`} alt={project.title} />
-                      <div className="project-overlay">
-                        <h4>{project.title}</h4>
-                        <p>{project.description}</p>
+                    <div className="card-image">
+                      <img src={project.cover} alt={project.title} />
+                      <div className="card-overlay">
+                        <h3>{project.title}</h3>
+                        <p>{project.summary}</p>
                       </div>
                     </div>
-                    <div className="project-meta">
+                    <div className="card-meta">
                       <span className="year">{project.year}</span>
+                      <span className="type">{project.type}</span>
                       <span className="location">{project.location}</span>
-                      <span className={`status ${project.status.toLowerCase()}`}>
-                        {project.status}
-                      </span>
                     </div>
                   </motion.div>
                 ))}
-              </div>
-              <div className="view-all">
-                <button
-                  className="secondary-button"
-                  onClick={() => setActiveSection('projects')}
-                >
-                  Voir tous les projets →
-                </button>
               </div>
             </div>
           </motion.section>
@@ -196,19 +238,59 @@ const ModernHeritageDashboard = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="about-content">
-              <h2>Notre Philosophie</h2>
+              <h2>Philosophie Institutionnelle</h2>
               <div className="philosophy-grid">
                 <div className="philosophy-item">
                   <h3>Tradition & Modernité</h3>
-                  <p>Nous enseignons l'architecture comme un pont entre le patrimoine ancestral et les défis contemporains.</p>
+                  <p>
+                    Nous enseignons l'architecture comme un pont entre le patrimoine ancestral 
+                    et les défis contemporains. Chaque projet doit respecter le contexte 
+                    culturel tout en intégrant les innovations techniques.
+                  </p>
                 </div>
                 <div className="philosophy-item">
                   <h3>Excellence Académique</h3>
-                  <p>Une formation rigoureuse associant théorie, pratique et recherche appliquée.</p>
+                  <p>
+                    Une formation rigoureuse associant théorie, pratique et recherche appliquée. 
+                    Nos étudiants bénéficient d'un encadrement personnalisé et d'opportunités 
+                    de stages en entreprise.
+                  </p>
                 </div>
                 <div className="philosophy-item">
                   <h3>Innovation Sociale</h3>
-                  <p>Des architectes engagés dans le développement durable et l'équité sociale.</p>
+                  <p>
+                    Des architectes engagés dans le développement durable et l'équité sociale. 
+                    Nous formons des professionnels conscients de leur responsabilité 
+                    environnementale et sociale.
+                  </p>
+                </div>
+              </div>
+
+              {/* Timeline Interactive */}
+              <div className="timeline-section">
+                <h3>Histoire de l'École</h3>
+                <div className="timeline">
+                  <div className="timeline-item">
+                    <div className="timeline-year">1985</div>
+                    <div className="timeline-content">
+                      <h4>Fondation</h4>
+                      <p>Création de l'ESSACA avec une première promotion de 30 étudiants</p>
+                    </div>
+                  </div>
+                  <div className="timeline-item">
+                    <div className="timeline-year">2000</div>
+                    <div className="timeline-content">
+                      <h4>Reconnaissance Internationale</h4>
+                      <p>Accréditation par l'Union Internationale des Architectes</p>
+                    </div>
+                  </div>
+                  <div className="timeline-item">
+                    <div className="timeline-year">2020</div>
+                    <div className="timeline-content">
+                      <h4>Innovation Pédagogique</h4>
+                      <p>Lancement du programme Architecture Durable et Bioclimatique</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -222,7 +304,7 @@ const ModernHeritageDashboard = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h2>Nos Projets</h2>
+            <h2>Galerie de Projets</h2>
             <div className="projects-filter">
               <button className="filter-btn active">Tous</button>
               <button className="filter-btn">Rénovation</button>
@@ -230,7 +312,7 @@ const ModernHeritageDashboard = () => {
               <button className="filter-btn">Urbanisme</button>
             </div>
             <div className="projects-gallery">
-              {projects.map((project, index) => (
+              {featuredProjects.map((project, index) => (
                 <motion.div
                   key={project.id}
                   className="project-card"
@@ -240,14 +322,19 @@ const ModernHeritageDashboard = () => {
                   whileHover={{ scale: 1.05 }}
                 >
                   <div className="project-image">
-                    <img src={`/api/placeholder/300/200`} alt={project.title} />
+                    <img src={project.cover} alt={project.title} />
                   </div>
                   <div className="project-info">
                     <h3>{project.title}</h3>
-                    <p>{project.description}</p>
+                    <p>{project.summary}</p>
                     <div className="project-details">
                       <span>{project.year}</span>
                       <span>{project.location}</span>
+                    </div>
+                    <div className="project-materials">
+                      {project.materials.map((material, idx) => (
+                        <span key={idx} className="material-tag">{material}</span>
+                      ))}
                     </div>
                   </div>
                 </motion.div>
@@ -265,36 +352,25 @@ const ModernHeritageDashboard = () => {
           >
             <h2>Actualités & Événements</h2>
             <div className="news-grid">
-              {[
-                {
-                  title: 'Journée Portes Ouvertes 2025',
-                  date: '15 Janvier 2025',
-                  type: 'Événement'
-                },
-                {
-                  title: 'Prix Aga Khan d\'Architecture',
-                  date: '12 Décembre 2024',
-                  type: 'Récompense'
-                },
-                {
-                  title: 'Nouveau programme Master Développement Durable',
-                  date: '1 Décembre 2024',
-                  type: 'Annonce'
-                }
-              ].map((news, index) => (
+              {news.map((item, index) => (
                 <motion.div
-                  key={index}
+                  key={item.id}
                   className="news-card"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
                 >
+                  <div className="news-image">
+                    <img src={item.cover} alt={item.title} />
+                  </div>
                   <div className="news-content">
-                    <h3>{news.title}</h3>
+                    <span className="news-category">{item.category}</span>
+                    <h3>{item.title}</h3>
+                    <p>{item.excerpt}</p>
                     <div className="news-meta">
-                      <span className="date">{news.date}</span>
-                      <span className="type">{news.type}</span>
+                      <span className="date">{new Date(item.publishedAt).toLocaleDateString('fr-FR')}</span>
+                      <span className="author">{item.author}</span>
                     </div>
                   </div>
                 </motion.div>

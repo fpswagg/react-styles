@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import Form from './components/Form'
-import Dashboard from './components/Dashboard'
 import { ModernHeritageDashboard } from './components/styles/modern-heritage'
 import { UrbanCanvasDashboard } from './components/styles/urban-canvas'
 import { GalleryPortfolioDashboard } from './components/styles/gallery-portfolio'
@@ -31,7 +29,7 @@ function App() {
         case STYLES.HYBRID_MODERN_TRADITION:
           return <HybridModernTraditionDashboard />
         default:
-          return <Dashboard />
+          return <ModernHeritageDashboard />
       }
     } catch (error) {
       console.error('Error rendering dashboard:', error)
@@ -63,12 +61,6 @@ function App() {
           >
             Dashboard
           </button>
-          <button
-            className={currentView === 'form' ? 'active' : ''}
-            onClick={() => setCurrentView('form')}
-          >
-            Form
-          </button>
         </div>
         <div className="app-nav-right">
           <label htmlFor="style-selector" className="style-label">
@@ -90,11 +82,10 @@ function App() {
       </nav>
 
       <main className="app-main">
-        {currentView === 'dashboard' ? renderDashboard() : <Form />}
+        {currentView === 'dashboard' ? renderDashboard() : null}
       </main>
     </div>
   )
 }
 
 export default App
-

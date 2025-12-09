@@ -86,7 +86,6 @@ const UrbanCanvasDashboard = () => {
               />
               <button className="search-btn">🔍</button>
             </div>
-            <button className="theme-toggle">🌓</button>
           </div>
         </div>
       </motion.header>
@@ -185,16 +184,16 @@ const UrbanCanvasDashboard = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6 }}
                   >
-                    <div className="hero-image">
-                      <img src="/api/placeholder/800/400" alt="Article principal" />
-                    </div>
-                    <div className="hero-content">
-                      <span className="article-category">{articles.find(a => a.featured).category}</span>
-                      <h2>{articles.find(a => a.featured).title}</h2>
-                      <p>{articles.find(a => a.featured).excerpt}</p>
-                      <div className="article-meta">
-                        <span>Par {articles.find(a => a.featured).author}</span>
-                        <span>{articles.find(a => a.featured).readTime}</span>
+                    <div className="hero-wrapper">
+                      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop" alt="Article principal" className="hero-bg-image" />
+                      <div className="hero-text-container">
+                        <span className="article-category">{articles.find(a => a.featured).category}</span>
+                        <h2>{articles.find(a => a.featured).title}</h2>
+                        <p>{articles.find(a => a.featured).excerpt}</p>
+                        <div className="article-meta">
+                          <span>Par {articles.find(a => a.featured).author}</span>
+                          <span>{articles.find(a => a.featured).readTime}</span>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -213,7 +212,7 @@ const UrbanCanvasDashboard = () => {
                     whileHover={{ scale: 1.02 }}
                   >
                     <div className="article-image">
-                      <img src={`/api/placeholder/300/200`} alt={article.title} />
+                      <img src={`https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop`} alt={article.title} />
                     </div>
                     <div className="article-content">
                       <span className="article-category">{article.category}</span>

@@ -27,4 +27,3 @@ export const StyleProvider = ({ children }) => {
     </StyleContext.Provider>
   )
 }
-
