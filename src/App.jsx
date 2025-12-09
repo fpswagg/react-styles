@@ -16,24 +16,6 @@ function App() {
   const { currentStyle, setCurrentStyle } = useStyle()
   const { cssVars, theme } = useStyleTheme()
 
-  // Rendu dynamique selon le style sélectionné
-  const renderDashboard = () => {
-    switch (currentStyle) {
-      case STYLES.MODERN_AGENCY:
-        return <ModernAgencyDashboard />
-      case STYLES.CORPORATE_CLASSIC:
-        return <CorporateDashboard />
-      case STYLES.CREATIVE_WORKSHOP:
-        return <CreativeWorkshopDashboard />
-      case STYLES.TECH_STARTUP:
-        return <TechStartupDashboard />
-      case STYLES.ACADEMIC_LIBRARY:
-        return <AcademicLibraryDashboard />
-      default:
-        return <Dashboard />
-    }
-  }
-
   return (
     <div className="app" style={cssVars} data-ambiance={theme.ambiance}>
       <nav className="app-nav">
@@ -74,7 +56,7 @@ function App() {
       </nav>
 
       <main className="app-main">
-        {currentView === 'dashboard' ? renderDashboard() : <Form />}
+        {currentView === 'dashboard' ? <Dashboard /> : <Form />}
       </main>
     </div>
   )

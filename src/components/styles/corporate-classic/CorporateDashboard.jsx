@@ -1,389 +1,317 @@
 import { useState } from 'react';
-import CorporateAccordion from './CorporateAccordion';
+import { motion } from 'framer-motion';
 
 const CorporateDashboard = () => {
-  const [openSections, setOpenSections] = useState({
-    executive: true,
-    finance: false,
-    operations: false,
-    hr: false,
-    strategy: false
-  });
+  const [activeSection, setActiveSection] = useState('overview');
 
-  const toggleSection = (section) => {
-    setOpenSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
-  const corporateData = {
-    executive: {
-      title: "Rapport Exécutif - Décembre 2024",
-      metrics: [
-        { label: "Chiffre d'Affaires", value: "€2,450,000", change: "+8.2%" },
-        { label: "Résultat Net", value: "€485,000", change: "+12.1%" },
-        { label: "Trésorerie", value: "€1,250,000", change: "Stable" }
-      ],
-      kpis: [
-        { label: "Satisfaction Client", value: "94%", status: "excellent" },
-        { label: "Délais Respectés", value: "96%", status: "excellent" },
-        { label: "Rotation Personnel", value: "4.2%", status: "good" }
-      ]
+  const reports = [
+    {
+      id: 1,
+      title: 'Rapport Exécutif',
+      type: 'Executif',
+      status: 'En cours',
+      progress: 75,
+      lastUpdate: '08/12/2024'
     },
-    finance: {
-      title: "États Financiers Détaillés",
-      balance: {
-        assets: "€3,200,000",
-        liabilities: "€1,950,000",
-        equity: "€1,250,000"
-      },
-      cashflow: {
-        operating: "€420,000",
-        investing: "-€180,000",
-        financing: "€95,000"
-      }
+    {
+      id: 2,
+      title: 'États Financiers',
+      type: 'Finance',
+      status: 'Validé',
+      progress: 100,
+      lastUpdate: '07/12/2024'
     },
-    operations: {
-      title: "Performance Opérationnelle",
-      departments: [
-        { name: "Production", efficiency: "87%", projects: 12 },
-        { name: "Qualité", score: "4.2/5", audits: 8 },
-        { name: "Logistique", ontime: "93%", suppliers: 45 }
-      ],
-      processes: [
-        "Procédure qualité ISO 9001",
-        "Gestion des risques",
-        "Plan de continuité"
-      ]
-    },
-    hr: {
-      title: "Ressources Humaines",
-      headcount: {
-        total: 245,
-        byDepartment: {
-          production: 120,
-          administration: 45,
-          commercial: 35,
-          direction: 15,
-          autres: 30
-        }
-      },
-      recruitment: {
-        openPositions: 8,
-        candidates: 156,
-        avgTimeToHire: "28 jours"
-      },
-      training: {
-        programs: 12,
-        participants: 89,
-        satisfaction: "4.1/5"
-      }
-    },
-    strategy: {
-      title: "Plan Stratégique 2025",
-      objectives: [
-        "Croissance organique 15%",
-        "Digitalisation complète",
-        "Expansion géographique",
-        "Innovation produit"
-      ],
-      initiatives: [
-        { name: "Transformation Digitale", progress: 65, deadline: "Q2 2025" },
-        { name: "Nouveau Siège", progress: 30, deadline: "Q4 2025" },
-        { name: "R&D Produit", progress: 45, deadline: "Q1 2025" }
-      ]
+    {
+      id: 3,
+      title: 'Performance Opérationnelle',
+      type: 'Operations',
+      status: 'En révision',
+      progress: 60,
+      lastUpdate: '06/12/2024'
     }
-  };
+  ];
+
+  const kpis = [
+    { label: 'Chiffre d\'affaires', value: '€2.45M', change: '+8.2%' },
+    { label: 'Résultat net', value: '€485K', change: '+12.1%' },
+    { label: 'Trésorerie', value: '€1.25M', change: 'Stable' },
+    { label: 'Satisfaction client', value: '94%', change: '+2.1%' }
+  ];
 
   return (
-    <div className="corporate-dashboard">
-      <div className="corporate-header">
-        <h1 className="corporate-title">Rapport Annuel 2024</h1>
-        <div className="corporate-subtitle">
-          <span>Entreprise S.A. au 31 décembre 2024</span>
-          <span className="corporate-date">Généré le: {new Date().toLocaleDateString('fr-FR')}</span>
-        </div>
+    <div className="corporate-container">
+      <motion.div
+        className="corporate-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <h1>Rapport Annuel 2024</h1>
+        <p className="corporate-subtitle">Entreprise S.A. au 31 décembre 2024</p>
+      </motion.div>
+
+      {/* Navigation */}
+      <div className="corporate-navigation">
+        {[
+          { id: 'overview', label: 'Vue d\'ensemble', icon: '📊' },
+          { id: 'reports', label: 'Rapports', icon: '📋' },
+          { id: 'kpis', label: 'KPIs', icon: '📈' },
+          { id: 'operations', label: 'Opérations', icon: '🏭' },
+          { id: 'forms', label: 'Formulaires', icon: '📝' }
+        ].map((section) => (
+          <motion.button
+            key={section.id}
+            className={`nav-button ${activeSection === section.id ? 'active' : ''}`}
+            onClick={() => setActiveSection(section.id)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="nav-icon">{section.icon}</span>
+            <span className="nav-label">{section.label}</span>
+          </motion.button>
+        ))}
       </div>
 
-      <div className="corporate-accordion-container">
-        {/* Section Executive */}
-        <CorporateAccordion
-          title="1. Rapport du Président Directeur Général"
-          isOpen={openSections.executive}
-          onToggle={() => toggleSection('executive')}
-          level={1}
-        >
-          <div className="executive-summary">
-            <div className="executive-intro">
-              <p>Mesdames, Messieurs,</p>
-              <p>L'exercice 2024 a été marqué par une croissance soutenue et des résultats financiers solides...</p>
-            </div>
-
-            <div className="executive-metrics">
-              <h4>Indicateurs Clés de Performance</h4>
-              <div className="metrics-grid">
-                {corporateData.executive.metrics.map((metric, index) => (
-                  <div key={index} className="metric-card">
-                    <div className="metric-label">{metric.label}</div>
-                    <div className="metric-value">{metric.value}</div>
-                    <div className={`metric-change ${metric.change.startsWith('+') ? 'positive' : 'neutral'}`}>
-                      {metric.change}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="executive-kpis">
-              <h4>Tableau de Bord Qualité</h4>
-              <div className="kpis-grid">
-                {corporateData.executive.kpis.map((kpi, index) => (
-                  <div key={index} className={`kpi-item status-${kpi.status}`}>
-                    <div className="kpi-value">{kpi.value}</div>
-                    <div className="kpi-label">{kpi.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </CorporateAccordion>
-
-        {/* Section Finance */}
-        <CorporateAccordion
-          title="2. États Financiers"
-          isOpen={openSections.finance}
-          onToggle={() => toggleSection('finance')}
-          level={1}
-        >
-          <div className="finance-section">
-            <CorporateAccordion
-              title="2.1 Bilan Consolidé"
-              isOpen={true}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="balance-sheet">
-                <div className="balance-row">
-                  <span className="account">ACTIF</span>
-                  <span className="amount">{corporateData.finance.balance.assets}</span>
-                </div>
-                <div className="balance-row">
-                  <span className="account">PASSIF</span>
-                  <span className="amount">{corporateData.finance.balance.liabilities}</span>
-                </div>
-                <div className="balance-row total">
-                  <span className="account">CAPITAUX PROPRES</span>
-                  <span className="amount">{corporateData.finance.balance.equity}</span>
-                </div>
-              </div>
-            </CorporateAccordion>
-
-            <CorporateAccordion
-              title="2.2 Flux de Trésorerie"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="cashflow-statement">
-                <div className="cf-row">
-                  <span>Flux d'exploitation</span>
-                  <span className="positive">{corporateData.finance.cashflow.operating}</span>
-                </div>
-                <div className="cf-row">
-                  <span>Flux d'investissement</span>
-                  <span className="negative">{corporateData.finance.cashflow.investing}</span>
-                </div>
-                <div className="cf-row">
-                  <span>Flux de financement</span>
-                  <span className="positive">{corporateData.finance.cashflow.financing}</span>
-                </div>
-              </div>
-            </CorporateAccordion>
-          </div>
-        </CorporateAccordion>
-
-        {/* Section Opérations */}
-        <CorporateAccordion
-          title="3. Performance Opérationnelle"
-          isOpen={openSections.operations}
-          onToggle={() => toggleSection('operations')}
-          level={1}
-        >
-          <div className="operations-section">
-            <div className="departments-overview">
-              <h4>Aperçu par Département</h4>
-              {corporateData.operations.departments.map((dept, index) => (
-                <CorporateAccordion
-                  key={index}
-                  title={`3.${index + 1} ${dept.name}`}
-                  isOpen={false}
-                  onToggle={() => {}}
-                  level={2}
+      {/* Content */}
+      <div className="corporate-content">
+        {activeSection === 'overview' && (
+          <motion.div
+            className="overview-section"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="overview-cards">
+              {kpis.map((kpi, index) => (
+                <motion.div
+                  key={kpi.label}
+                  className="kpi-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
                 >
-                  <div className="department-details">
-                    {dept.efficiency && <p>Efficacité: {dept.efficiency}</p>}
-                    {dept.score && <p>Score qualité: {dept.score}</p>}
-                    {dept.ontime && <p>À l'heure: {dept.ontime}</p>}
-                    {dept.projects && <p>Projets actifs: {dept.projects}</p>}
-                    {dept.audits && <p>Audits passés: {dept.audits}</p>}
-                    {dept.suppliers && <p>Fournisseurs: {dept.suppliers}</p>}
+                  <div className="kpi-value">{kpi.value}</div>
+                  <div className="kpi-label">{kpi.label}</div>
+                  <div className={`kpi-change ${kpi.change.startsWith('+') ? 'positive' : kpi.change === 'Stable' ? 'neutral' : 'negative'}`}>
+                    {kpi.change}
                   </div>
-                </CorporateAccordion>
+                </motion.div>
               ))}
             </div>
 
-            <CorporateAccordion
-              title="3.4 Processus et Procédures"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <ul className="processes-list">
-                {corporateData.operations.processes.map((process, index) => (
-                  <li key={index}>{process}</li>
-                ))}
-              </ul>
-            </CorporateAccordion>
-          </div>
-        </CorporateAccordion>
+            <div className="quick-actions">
+              <motion.button
+                className="action-button primary"
+                onClick={() => setActiveSection('reports')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Consulter les rapports
+              </motion.button>
+              <motion.button
+                className="action-button secondary"
+                onClick={() => setActiveSection('forms')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Accéder aux formulaires
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
 
-        {/* Section RH */}
-        <CorporateAccordion
-          title="4. Ressources Humaines"
-          isOpen={openSections.hr}
-          onToggle={() => toggleSection('hr')}
-          level={1}
-        >
-          <div className="hr-section">
-            <CorporateAccordion
-              title="4.1 Effectifs"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="headcount-details">
-                <div className="total-headcount">
-                  <span className="number">{corporateData.hr.headcount.total}</span>
-                  <span className="label">collaborateurs</span>
-                </div>
-                <div className="department-breakdown">
-                  {Object.entries(corporateData.hr.headcount.byDepartment).map(([dept, count]) => (
-                    <div key={dept} className="dept-item">
-                      <span className="dept-name">{dept}</span>
-                      <span className="dept-count">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CorporateAccordion>
-
-            <CorporateAccordion
-              title="4.2 Recrutement"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="recruitment-metrics">
-                <div className="recruitment-grid">
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.recruitment.openPositions}</span>
-                    <span className="label">Postes ouverts</span>
+        {activeSection === 'reports' && (
+          <motion.div
+            className="reports-section"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Rapports et Documents</h2>
+            <div className="reports-grid">
+              {reports.map((report, index) => (
+                <motion.div
+                  key={report.id}
+                  className="report-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="report-header">
+                    <h3>{report.title}</h3>
+                    <span className={`status-badge ${report.status.toLowerCase().replace(' ', '-')}`}>
+                      {report.status}
+                    </span>
                   </div>
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.recruitment.candidates}</span>
-                    <span className="label">Candidatures</span>
+                  <div className="report-meta">
+                    <span>Type: {report.type}</span>
+                    <span>Dernière MAJ: {report.lastUpdate}</span>
                   </div>
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.recruitment.avgTimeToHire}</span>
-                    <span className="label">Temps de recrutement</span>
-                  </div>
-                </div>
-              </div>
-            </CorporateAccordion>
-
-            <CorporateAccordion
-              title="4.3 Formation"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="training-metrics">
-                <div className="training-grid">
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.training.programs}</span>
-                    <span className="label">Programmes actifs</span>
-                  </div>
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.training.participants}</span>
-                    <span className="label">Participants</span>
-                  </div>
-                  <div className="metric">
-                    <span className="value">{corporateData.hr.training.satisfaction}</span>
-                    <span className="label">Satisfaction</span>
-                  </div>
-                </div>
-              </div>
-            </CorporateAccordion>
-          </div>
-        </CorporateAccordion>
-
-        {/* Section Stratégie */}
-        <CorporateAccordion
-          title="5. Plan Stratégique"
-          isOpen={openSections.strategy}
-          onToggle={() => toggleSection('strategy')}
-          level={1}
-        >
-          <div className="strategy-section">
-            <CorporateAccordion
-              title="5.1 Objectifs Stratégiques 2025"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <ul className="objectives-list">
-                {corporateData.strategy.objectives.map((objective, index) => (
-                  <li key={index}>{objective}</li>
-                ))}
-              </ul>
-            </CorporateAccordion>
-
-            <CorporateAccordion
-              title="5.2 Initiatives Clés"
-              isOpen={false}
-              onToggle={() => {}}
-              level={2}
-            >
-              <div className="initiatives-list">
-                {corporateData.strategy.initiatives.map((initiative, index) => (
-                  <div key={index} className="initiative-item">
-                    <div className="initiative-header">
-                      <h5>{initiative.name}</h5>
-                      <span className="deadline">Échéance: {initiative.deadline}</span>
-                    </div>
+                  <div className="report-progress">
                     <div className="progress-bar">
-                      <div
+                      <motion.div
                         className="progress-fill"
-                        style={{ width: `${initiative.progress}%` }}
-                      ></div>
+                        initial={{ width: 0 }}
+                        animate={{ width: `${report.progress}%` }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                      />
                     </div>
-                    <span className="progress-text">{initiative.progress}%</span>
+                    <span className="progress-text">{report.progress}%</span>
                   </div>
-                ))}
-              </div>
-            </CorporateAccordion>
-          </div>
-        </CorporateAccordion>
-      </div>
+                  <button className="view-report-btn">Consulter</button>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
-      <div className="corporate-footer">
-        <div className="signature-section">
-          <p>Approuvé par le Conseil d'Administration</p>
-          <div className="signature-line"></div>
-          <p className="signature-name">Jean Dupont</p>
-          <p className="signature-title">Président Directeur Général</p>
-        </div>
+        {activeSection === 'kpis' && (
+          <motion.div
+            className="kpis-section"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Indicateurs Clés de Performance</h2>
+            <div className="kpis-dashboard">
+              {kpis.map((kpi, index) => (
+                <motion.div
+                  key={kpi.label}
+                  className="kpi-widget"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <div className="widget-value">{kpi.value}</div>
+                  <div className="widget-label">{kpi.label}</div>
+                  <div className="widget-change">{kpi.change}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'operations' && (
+          <motion.div
+            className="operations-section"
+            initial={{ opacity: 0, rotateY: -15 }}
+            animate={{ opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Performance Opérationnelle</h2>
+            <div className="operations-grid">
+              {[
+                { department: 'Production', efficiency: '87%', status: 'Excellent' },
+                { department: 'Qualité', score: '4.2/5', status: 'Très bon' },
+                { department: 'Logistique', ontime: '93%', status: 'Bon' },
+                { department: 'RH', satisfaction: '88%', status: 'Bon' }
+              ].map((op, index) => (
+                <motion.div
+                  key={op.department}
+                  className="operation-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <h4>{op.department}</h4>
+                  <div className="operation-metrics">
+                    {Object.entries(op).filter(([key]) => key !== 'department' && key !== 'status').map(([key, value]) => (
+                      <div key={key} className="metric">
+                        <span className="metric-label">{key}:</span>
+                        <span className="metric-value">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <span className={`status-badge ${op.status.toLowerCase()}`}>
+                    {op.status}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'forms' && (
+          <motion.div
+            className="forms-section"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Formulaires RH</h2>
+            <div className="forms-grid">
+              <div className="form-card">
+                <h3>Demande de Congés</h3>
+                <form className="corporate-form">
+                  <div className="form-group">
+                    <label>Type de congé</label>
+                    <select>
+                      <option>Congés payés</option>
+                      <option>RTT</option>
+                      <option>Maladie</option>
+                      <option>Exceptionnel</option>
+                    </select>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Date de début</label>
+                      <input type="date" />
+                    </div>
+                    <div className="form-group">
+                      <label>Date de fin</label>
+                      <input type="date" />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Motif</label>
+                    <textarea placeholder="Décrivez le motif de votre demande..." rows="3"></textarea>
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary">Annuler</button>
+                    <button type="submit" className="btn-primary">Soumettre</button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="form-card">
+                <h3>Note de Frais</h3>
+                <form className="corporate-form">
+                  <div className="form-group">
+                    <label>Type de dépense</label>
+                    <select>
+                      <option>Déplacement</option>
+                      <option>Repas</option>
+                      <option>Hébergement</option>
+                      <option>Fournitures</option>
+                      <option>Autre</option>
+                    </select>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Montant (€)</label>
+                      <input type="number" step="0.01" placeholder="0.00" />
+                    </div>
+                    <div className="form-group">
+                      <label>Date</label>
+                      <input type="date" />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label>Description</label>
+                    <textarea placeholder="Décrivez la dépense..." rows="2"></textarea>
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary">Annuler</button>
+                    <button type="submit" className="btn-primary">Soumettre</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

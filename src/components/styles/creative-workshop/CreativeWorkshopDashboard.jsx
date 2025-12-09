@@ -1,157 +1,279 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import CreativeCanvas from './CreativeCanvas';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const CreativeWorkshopDashboard = () => {
-  const [currentProject, setCurrentProject] = useState(null);
-  const [projects, setProjects] = useState([
+  const [activeSection, setActiveSection] = useState('overview');
+
+  const projects = [
     {
       id: 1,
       title: 'Rêverie Automnale',
       mood: 'Énergique',
-      inspiration: ['automne', 'feuilles', 'couleurs chaudes', 'mouvement'],
-      created: new Date(),
-      thumbnail: null
+      progress: 85,
+      inspiration: ['automne', 'feuilles', 'couleurs chaudes'],
+      lastEdit: '08/12/2024'
     },
     {
       id: 2,
       title: 'Lumières Citadines',
       mood: 'Calme',
-      inspiration: ['ville', 'néons', 'nuit', 'géométrie'],
-      created: new Date(Date.now() - 86400000),
-      thumbnail: null
+      progress: 60,
+      inspiration: ['ville', 'néons', 'nuit'],
+      lastEdit: '07/12/2024'
     },
     {
       id: 3,
       title: 'Nature Organique',
       mood: 'Naturel',
-      inspiration: ['plantes', 'courbes', 'textures', 'croissance'],
-      created: new Date(Date.now() - 172800000),
-      thumbnail: null
+      progress: 30,
+      inspiration: ['plantes', 'courbes', 'croissance'],
+      lastEdit: '06/12/2024'
     }
-  ]);
-
-  const [showProjectCreator, setShowProjectCreator] = useState(false);
-  const [newProjectTitle, setNewProjectTitle] = useState('');
-  const [selectedMood, setSelectedMood] = useState('Énergique');
-
-  const moods = [
-    { name: 'Énergique', emoji: '⚡', color: '#FF6B6B' },
-    { name: 'Calme', emoji: '🌸', color: '#4ECDC4' },
-    { name: 'Ludique', emoji: '🎪', color: '#FFD93D' },
-    { name: 'Naturel', emoji: '🌿', color: '#6BCF7F' },
-    { name: 'Magique', emoji: '✨', color: '#A78BFA' }
   ];
 
-  const createNewProject = () => {
-    if (newProjectTitle.trim()) {
-      const newProject = {
-        id: Date.now(),
-        title: newProjectTitle,
-        mood: selectedMood,
-        inspiration: [],
-        created: new Date(),
-        thumbnail: null
-      };
-      setProjects(prev => [newProject, ...prev]);
-      setCurrentProject(newProject);
-      setNewProjectTitle('');
-      setShowProjectCreator(false);
-    }
-  };
+  const moods = [
+    { name: 'Énergique', emoji: '⚡', count: 3, color: '#FF6B6B' },
+    { name: 'Calme', emoji: '🌸', count: 2, color: '#4ECDC4' },
+    { name: 'Naturel', emoji: '🌿', count: 4, color: '#6BCF7F' },
+    { name: 'Ludique', emoji: '🎪', count: 1, color: '#FFD93D' }
+  ];
 
-  const saveProjectThumbnail = (projectId, thumbnail) => {
-    setProjects(prev => prev.map(project =>
-      project.id === projectId
-        ? { ...project, thumbnail }
-        : project
-    ));
-  };
-
-  const deleteProject = (projectId) => {
-    setProjects(prev => prev.filter(project => project.id !== projectId));
-    if (currentProject && currentProject.id === projectId) {
-      setCurrentProject(null);
-    }
-  };
+  const inspirationWords = [
+    'automne', 'feuilles', 'couleurs', 'mouvement', 'ville', 'néons',
+    'nuit', 'géométrie', 'plantes', 'courbes', 'croissance', 'lumière'
+  ];
 
   return (
     <div className="creative-workshop-container">
       <motion.div
         className="workshop-header"
-        initial={{ opacity: 0, y: -30 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.6 }}
       >
-        <div className="header-content">
-          <h1>Creative Workshop</h1>
-          <p className="workshop-subtitle">Atelier créatif organique - Canvas interactifs et inspiration naturelle</p>
-          <div className="current-mood">
-            <span className="mood-label">Humeur actuelle:</span>
-            <motion.span
-              className="mood-value"
-              key={currentProject?.mood || 'Aucune'}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {currentProject ? `${moods.find(m => m.name === currentProject.mood)?.emoji} ${currentProject.mood}` : '✨ En recherche'}
-            </motion.span>
-          </div>
-        </div>
-
-        <motion.button
-          className="new-project-btn"
-          onClick={() => setShowProjectCreator(true)}
-          whileHover={{
-            scale: 1.05,
-            boxShadow: "0 10px 25px rgba(139, 69, 19, 0.3)"
-          }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span>+</span>
-          Nouveau Projet
-        </motion.button>
+        <h1>Creative Workshop</h1>
+        <p>Atelier créatif organique - Canvas interactifs et inspiration naturelle</p>
       </motion.div>
 
-      {/* Créateur de projet */}
-      <AnimatePresence>
-        {showProjectCreator && (
+      {/* Navigation */}
+      <div className="workshop-navigation">
+        {[
+          { id: 'overview', label: 'Vue d\'ensemble', icon: '🎨' },
+          { id: 'projects', label: 'Projets', icon: '📁' },
+          { id: 'moods', label: 'Humeurs', icon: '😊' },
+          { id: 'inspiration', label: 'Inspiration', icon: '✨' },
+          { id: 'forms', label: 'Créer', icon: '➕' }
+        ].map((section) => (
+          <motion.button
+            key={section.id}
+            className={`nav-button ${activeSection === section.id ? 'active' : ''}`}
+            onClick={() => setActiveSection(section.id)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="nav-icon">{section.icon}</span>
+            <span className="nav-label">{section.label}</span>
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Content */}
+      <div className="workshop-content">
+        {activeSection === 'overview' && (
           <motion.div
-            className="project-creator-overlay"
+            className="overview-section"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowProjectCreator(false)}
+            transition={{ duration: 0.5 }}
           >
-            <motion.div
-              className="project-creator"
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3>Créer un Nouveau Projet</h3>
-
-              <div className="creator-field">
-                <label>Titre du projet</label>
-                <input
-                  type="text"
-                  value={newProjectTitle}
-                  onChange={(e) => setNewProjectTitle(e.target.value)}
-                  placeholder="Ex: Rêverie Automnale"
-                  onKeyPress={(e) => e.key === 'Enter' && createNewProject()}
-                />
+            <div className="overview-stats">
+              <div className="stat-card">
+                <div className="stat-number">{projects.length}</div>
+                <div className="stat-label">Projets actifs</div>
               </div>
+              <div className="stat-card">
+                <div className="stat-number">{moods.length}</div>
+                <div className="stat-label">Humeurs explorées</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">{inspirationWords.length}</div>
+                <div className="stat-label">Mots d'inspiration</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">85%</div>
+                <div className="stat-label">Créativité moyenne</div>
+              </div>
+            </div>
 
-              <div className="creator-field">
+            <div className="quick-actions">
+              <motion.button
+                className="action-button primary"
+                onClick={() => setActiveSection('projects')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Explorer les projets
+              </motion.button>
+              <motion.button
+                className="action-button secondary"
+                onClick={() => setActiveSection('forms')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Nouveau projet
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'projects' && (
+          <motion.div
+            className="projects-section"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Mes Projets Créatifs</h2>
+            <div className="projects-gallery">
+              {projects.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  className="project-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div className="project-thumbnail">
+                    <div className="thumbnail-placeholder">
+                      <span className="mood-emoji">
+                        {moods.find(m => m.name === project.mood)?.emoji || '🎨'}
+                      </span>
+                      <div className="organic-shapes">
+                        {[...Array(3)].map((_, i) => (
+                          <div key={i} className="shape"></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="project-info">
+                    <h3>{project.title}</h3>
+                    <div className="project-meta">
+                      <span className="mood-tag">{project.mood}</span>
+                      <span className="progress">{project.progress}%</span>
+                    </div>
+                    <div className="inspiration-tags">
+                      {project.inspiration.slice(0, 2).map((tag, i) => (
+                        <span key={i} className="tag">#{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="project-progress">
+                    <div className="progress-bar">
+                      <motion.div
+                        className="progress-fill"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${project.progress}%` }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'moods' && (
+          <motion.div
+            className="moods-section"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Humeurs Créatives</h2>
+            <div className="moods-grid">
+              {moods.map((mood, index) => (
+                <motion.div
+                  key={mood.name}
+                  className="mood-card"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.1 }}
+                  style={{ borderColor: mood.color }}
+                >
+                  <div className="mood-emoji" style={{ color: mood.color }}>
+                    {mood.emoji}
+                  </div>
+                  <div className="mood-info">
+                    <h3 style={{ color: mood.color }}>{mood.name}</h3>
+                    <p>{mood.count} projet{mood.count > 1 ? 's' : ''}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'inspiration' && (
+          <motion.div
+            className="inspiration-section"
+            initial={{ opacity: 0, rotateY: -15 }}
+            animate={{ opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Galerie d'Inspiration</h2>
+            <div className="inspiration-cloud">
+              {inspirationWords.map((word, index) => (
+                <motion.span
+                  key={word}
+                  className="inspiration-word"
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{
+                    scale: 1.2,
+                    color: '#D2691E'
+                  }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </div>
+            <div className="inspiration-actions">
+              <motion.button
+                className="generate-btn"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                🎲 Générer de nouvelles idées
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'forms' && (
+          <motion.div
+            className="forms-section"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Créer un Nouveau Projet</h2>
+            <form className="project-form">
+              <div className="form-group">
+                <label>Titre du projet</label>
+                <input type="text" placeholder="Ex: Rêverie Automnale" />
+              </div>
+              <div className="form-group">
                 <label>Humeur créative</label>
                 <div className="mood-selector">
                   {moods.map((mood) => (
                     <motion.button
                       key={mood.name}
-                      className={`mood-option ${selectedMood === mood.name ? 'selected' : ''}`}
-                      onClick={() => setSelectedMood(mood.name)}
+                      type="button"
+                      className="mood-option"
                       style={{ borderColor: mood.color }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -162,193 +284,48 @@ const CreativeWorkshopDashboard = () => {
                   ))}
                 </div>
               </div>
-
-              <div className="creator-actions">
-                <button
-                  className="cancel-btn"
-                  onClick={() => setShowProjectCreator(false)}
-                >
-                  Annuler
-                </button>
-                <button
-                  className="create-btn"
-                  onClick={createNewProject}
-                  disabled={!newProjectTitle.trim()}
-                >
-                  Créer le projet
-                </button>
+              <div className="form-group">
+                <label>Mots d'inspiration</label>
+                <div className="inspiration-input">
+                  <input type="text" placeholder="Ajouter un mot..." />
+                  <button type="button" className="add-word-btn">+</button>
+                </div>
+                <div className="inspiration-tags">
+                  {['automne', 'couleurs'].map((tag, i) => (
+                    <span key={i} className="tag">#{tag}</span>
+                  ))}
+                </div>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="workshop-content">
-        {!currentProject ? (
-          /* Galerie de projets */
-          <motion.div
-            className="projects-gallery"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <h2>Mes Projets Créatifs</h2>
-
-            <div className="projects-grid">
-              {projects.map((project, index) => (
-                <motion.div
-                  key={project.id}
-                  className="project-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{
-                    scale: 1.05,
-                    boxShadow: "0 15px 35px rgba(139, 69, 19, 0.2)"
-                  }}
-                  onClick={() => setCurrentProject(project)}
-                >
-                  <div className="project-thumbnail">
-                    {project.thumbnail ? (
-                      <img src={project.thumbnail} alt={project.title} />
-                    ) : (
-                      <div className="thumbnail-placeholder">
-                        <span className="placeholder-emoji">
-                          {moods.find(m => m.name === project.mood)?.emoji || '🎨'}
-                        </span>
-                        <div className="organic-shapes">
-                          <div className="shape"></div>
-                          <div className="shape"></div>
-                          <div className="shape"></div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="project-info">
-                    <h3>{project.title}</h3>
-                    <div className="project-meta">
-                      <span className="mood-tag">
-                        {moods.find(m => m.name === project.mood)?.emoji} {project.mood}
-                      </span>
-                      <span className="date">
-                        {project.created.toLocaleDateString('fr-FR')}
-                      </span>
-                    </div>
-
-                    {project.inspiration.length > 0 && (
-                      <div className="inspiration-tags">
-                        {project.inspiration.slice(0, 3).map((tag, i) => (
-                          <span key={i} className="tag">#{tag}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <motion.button
-                    className="delete-project-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteProject(project.id);
-                    }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    🗑️
-                  </motion.button>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        ) : (
-          /* Canvas de création */
-          <motion.div
-            className="creation-workspace"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-          >
-            <div className="workspace-header">
-              <motion.button
-                className="back-to-gallery"
-                onClick={() => setCurrentProject(null)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                ← Retour à la galerie
-              </motion.button>
-
-              <div className="project-status">
-                <span className="status-indicator">●</span>
-                Projet en cours
+              <div className="form-actions">
+                <button type="button" className="btn-secondary">Annuler</button>
+                <button type="submit" className="btn-primary">Créer le projet</button>
               </div>
-            </div>
-
-            <CreativeCanvas
-              project={currentProject}
-              onSave={(thumbnail) => saveProjectThumbnail(currentProject.id, thumbnail)}
-            />
-
-            {/* Inspiration panel flottant */}
-            <motion.div
-              className="inspiration-panel"
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              drag
-              dragConstraints={{ left: -200, right: 50, top: -100, bottom: 100 }}
-            >
-              <h4>Inspirations</h4>
-              <div className="inspiration-words">
-                {currentProject.inspiration.map((word, index) => (
-                  <motion.span
-                    key={index}
-                    className="inspiration-word"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{
-                      scale: 1.2,
-                      color: moods.find(m => m.name === currentProject.mood)?.color
-                    }}
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </div>
-
-              <div className="inspiration-actions">
-                <button className="add-word-btn">+ Mot</button>
-                <button className="generate-btn">🎲 Générer</button>
-              </div>
-            </motion.div>
+            </form>
           </motion.div>
         )}
       </div>
 
-      {/* Éléments organiques flottants en arrière-plan */}
-      <div className="background-organic-elements">
-        {[...Array(8)].map((_, i) => (
+      {/* Éléments organiques flottants */}
+      <div className="background-elements">
+        {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
             className="organic-element"
             style={{
-              left: `${10 + i * 12}%`,
-              top: `${20 + (i % 3) * 25}%`,
-              fontSize: `${1 + Math.random() * 2}rem`
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 2) * 30}%`,
+              animationDelay: `${i * 0.5}s`
             }}
             animate={{
-              y: [0, -20, 0],
-              rotate: [0, 5, -5, 0],
-              scale: [1, 1.1, 1]
+              y: [0, -10, 0],
+              rotate: [0, 5, -5, 0]
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 2
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity
             }}
           >
-            {['🌿', '🍃', '🌸', '🦋', '✨', '🌱', '🌺', '🪶'][i % 8]}
+            {['🌿', '🍃', '🌸', '🦋', '✨'][i % 5]}
           </motion.div>
         ))}
       </div>

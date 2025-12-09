@@ -1,428 +1,64 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import AcademicTabs from './AcademicTabs';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const AcademicLibraryDashboard = () => {
-  const [activeTab, setActiveTab] = useState('research');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [bookmarks, setBookmarks] = useState([]);
-
-  const tabs = [
-    { id: 'research', title: 'Recherche', icon: '📚' },
-    { id: 'library', title: 'Bibliothèque', icon: '📖' },
-    { id: 'citations', title: 'Citations', icon: '📝' },
-    { id: 'notes', title: 'Notes', icon: '📓' }
-  ];
+  const [activeSection, setActiveSection] = useState('overview');
 
   const researchData = {
     recent: [
       {
         title: 'La phénoménologie de Husserl',
         author: 'Edmund Husserl',
-        type: 'Ouvrage théorique',
-        pages: 247,
         progress: 65,
-        lastRead: '2024-12-08',
-        citations: 23
+        citations: 23,
+        lastRead: '08/12/2024'
       },
       {
         title: 'Être et temps',
         author: 'Martin Heidegger',
-        type: 'Monographie',
-        pages: 589,
         progress: 30,
-        lastRead: '2024-12-07',
-        citations: 45
+        citations: 45,
+        lastRead: '07/12/2024'
       },
       {
         title: 'Critique de la raison pure',
         author: 'Emmanuel Kant',
-        type: 'Traité philosophique',
-        pages: 856,
         progress: 12,
-        lastRead: '2024-12-06',
-        citations: 78
+        citations: 78,
+        lastRead: '06/12/2024'
       }
     ],
     topics: [
       { name: 'Phénoménologie', count: 23, color: '#8B4513' },
       { name: 'Ontologie', count: 18, color: '#DAA520' },
-      { name: 'Épistémologie', count: 31, color: '#CD853F' },
-      { name: 'Éthique', count: 15, color: '#A0522D' }
-    ]
-  };
-
-  const libraryData = {
-    sections: [
-      {
-        name: 'Philosophie Antique',
-        books: 1456,
-        available: 1423,
-        borrowed: 33
-      },
-      {
-        name: 'Philosophie Moderne',
-        books: 892,
-        available: 876,
-        borrowed: 16
-      },
-      {
-        name: 'Philosophie Contemporaine',
-        books: 678,
-        available: 654,
-        borrowed: 24
-      },
-      {
-        name: 'Sciences Humaines',
-        books: 1234,
-        available: 1189,
-        borrowed: 45
-      }
+      { name: 'Éthique', count: 15, color: '#CD853F' }
     ]
   };
 
   const citationsData = [
     {
-      id: 1,
-      text: '"La conscience est toujours conscience de quelque chose"',
-      author: 'Edmund Husserl',
-      source: 'Idées directrices pour une phénoménologie',
-      page: 87,
-      category: 'Phénoménologie',
-      dateAdded: '2024-12-08'
-    },
-    {
-      id: 2,
       text: '"L\'être est ce qui se manifeste dans la compréhension"',
       author: 'Martin Heidegger',
       source: 'Être et temps',
       page: 143,
-      category: 'Ontologie',
-      dateAdded: '2024-12-07'
+      category: 'Ontologie'
     },
     {
-      id: 3,
       text: '"Deux choses remplissent l\'âme d\'une admiration... toujours nouvelle"',
       author: 'Immanuel Kant',
       source: 'Critique de la raison pratique',
       page: 288,
-      category: 'Éthique',
-      dateAdded: '2024-12-06'
+      category: 'Éthique'
     }
   ];
-
-  const notesData = [
-    {
-      id: 1,
-      title: 'Réduction phénoménologique',
-      content: 'La réduction eidétique permet d\'accéder à l\'essence des phénomènes...',
-      tags: ['phénoménologie', 'méthode', 'réduction'],
-      created: '2024-12-08',
-      lastModified: '2024-12-08'
-    },
-    {
-      id: 2,
-      title: 'Différence ontologique',
-      content: 'Heidegger distingue l\'être de l\'étant, ouvrant ainsi la question fondamentale...',
-      tags: ['ontologie', 'heidegger', 'différence'],
-      created: '2024-12-07',
-      lastModified: '2024-12-07'
-    }
-  ];
-
-  const toggleBookmark = (itemId) => {
-    setBookmarks(prev =>
-      prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
-
-  const renderPageNumbers = (totalPages) => {
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <motion.button
-          key={i}
-          className={`page-number ${currentPage === i ? 'active' : ''}`}
-          onClick={() => setCurrentPage(i)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          initial={{ opacity: 0, rotateY: -90 }}
-          animate={{ opacity: 1, rotateY: 0 }}
-          transition={{ delay: i * 0.05 }}
-        >
-          {i}
-        </motion.button>
-      );
-    }
-    return pages;
-  };
-
-  const renderResearchContent = () => (
-    <div className="research-content">
-      {/* Barre de recherche manuscrite */}
-      <div className="manuscript-search">
-        <div className="search-ornament left"></div>
-        <input
-          type="text"
-          placeholder="Rechercher dans les ouvrages..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="manuscript-input"
-        />
-        <div className="search-ornament right"></div>
-      </div>
-
-      {/* Sujets de recherche */}
-      <div className="topics-section">
-        <h3>Domaines de Recherche</h3>
-        <div className="topics-cloud">
-          {researchData.topics.map((topic, index) => (
-            <motion.div
-              key={topic.name}
-              className="topic-tag"
-              style={{
-                backgroundColor: topic.color + '20',
-                borderColor: topic.color
-              }}
-              whileHover={{
-                scale: 1.1,
-                boxShadow: `0 5px 15px ${topic.color}30`
-              }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              {topic.name}
-              <span className="topic-count">{topic.count}</span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Lectures récentes */}
-      <div className="recent-readings">
-        <h3>Lectures en Cours</h3>
-        <div className="readings-list">
-          {researchData.recent.map((book, index) => (
-            <motion.div
-              key={index}
-              className="reading-item"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="book-spine" style={{
-                background: `linear-gradient(135deg, #8B4513, #DAA520)`
-              }}>
-                <div className="spine-title">{book.title.split(' ')[0]}</div>
-              </div>
-
-              <div className="book-details">
-                <h4>{book.title}</h4>
-                <p className="author">{book.author}</p>
-                <p className="type">{book.type}</p>
-
-                <div className="reading-progress">
-                  <div className="progress-bar">
-                    <motion.div
-                      className="progress-fill"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${book.progress}%` }}
-                      transition={{ delay: index * 0.2, duration: 1 }}
-                    />
-                  </div>
-                  <span className="progress-text">{book.progress}%</span>
-                </div>
-
-                <div className="book-meta">
-                  <span>{book.pages} pages</span>
-                  <span>{book.citations} citations</span>
-                  <span>Dernière lecture: {book.lastRead}</span>
-                </div>
-              </div>
-
-              <motion.button
-                className={`bookmark-btn ${bookmarks.includes(book.title) ? 'bookmarked' : ''}`}
-                onClick={() => toggleBookmark(book.title)}
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.8 }}
-              >
-                📖
-              </motion.button>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderLibraryContent = () => (
-    <div className="library-content">
-      <div className="library-stats">
-        <motion.div
-          className="total-books"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: "spring", delay: 0.3 }}
-        >
-          <span className="big-number">
-            {libraryData.sections.reduce((acc, section) => acc + section.books, 0).toLocaleString()}
-          </span>
-          <span className="label">ouvrages</span>
-        </motion.div>
-      </div>
-
-      <div className="library-sections">
-        <h3>Sections de la Bibliothèque</h3>
-        {libraryData.sections.map((section, index) => (
-          <motion.div
-            key={section.name}
-            className="section-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <div className="section-header">
-              <h4>{section.name}</h4>
-              <div className="section-stats">
-                <span className="total">{section.books} ouvrages</span>
-                <span className="available">{section.available} disponibles</span>
-                <span className="borrowed">{section.borrowed} empruntés</span>
-              </div>
-            </div>
-
-            <div className="availability-bar">
-              <motion.div
-                className="available-fill"
-                initial={{ width: 0 }}
-                animate={{ width: `${(section.available / section.books) * 100}%` }}
-                transition={{ delay: index * 0.2 + 0.5, duration: 1 }}
-              />
-              <motion.div
-                className="borrowed-fill"
-                initial={{ width: 0 }}
-                animate={{ width: `${(section.borrowed / section.books) * 100}%` }}
-                transition={{ delay: index * 0.2 + 0.7, duration: 1 }}
-              />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderCitationsContent = () => (
-    <div className="citations-content">
-      <div className="citations-header">
-        <h3>Citations Collectées</h3>
-        <div className="citation-count">
-          {citationsData.length} citations dans votre bibliothèque personnelle
-        </div>
-      </div>
-
-      <div className="citations-list">
-        {citationsData.map((citation, index) => (
-          <motion.div
-            key={citation.id}
-            className="citation-card"
-            initial={{ opacity: 0, rotateY: -90 }}
-            animate={{ opacity: 1, rotateY: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <div className="citation-quotation">"</div>
-            <div className="citation-text">{citation.text}</div>
-            <div className="citation-footer">
-              <div className="citation-source">
-                <span className="author">{citation.author}</span>
-                <span className="source">— {citation.source}, p. {citation.page}</span>
-              </div>
-              <div className="citation-meta">
-                <span className="category">{citation.category}</span>
-                <span className="date">{citation.dateAdded}</span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderNotesContent = () => (
-    <div className="notes-content">
-      <div className="notes-header">
-        <h3>Notes de Recherche</h3>
-        <motion.button
-          className="add-note-btn"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          ✏️ Nouvelle Note
-        </motion.button>
-      </div>
-
-      <div className="notes-grid">
-        {notesData.map((note, index) => (
-          <motion.div
-            key={note.id}
-            className="note-card"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: "0 8px 25px rgba(139, 69, 19, 0.2)"
-            }}
-          >
-            <div className="note-header">
-              <h4>{note.title}</h4>
-              <div className="note-date">{note.created}</div>
-            </div>
-
-            <div className="note-content">
-              {note.content.substring(0, 150)}...
-            </div>
-
-            <div className="note-tags">
-              {note.tags.map((tag, tagIndex) => (
-                <span key={tagIndex} className="note-tag">#{tag}</span>
-              ))}
-            </div>
-
-            <div className="note-actions">
-              <button className="note-action-btn">📖 Lire</button>
-              <button className="note-action-btn">✏️ Éditer</button>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderActiveContent = () => {
-    switch (activeTab) {
-      case 'research':
-        return renderResearchContent();
-      case 'library':
-        return renderLibraryContent();
-      case 'citations':
-        return renderCitationsContent();
-      case 'notes':
-        return renderNotesContent();
-      default:
-        return renderResearchContent();
-    }
-  };
 
   return (
     <div className="academic-library-container">
       <motion.div
         className="library-header"
-        initial={{ opacity: 0, y: -30 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.6 }}
       >
         <div className="library-title">
           <span className="title-text">Bibliothèque Académique</span>
@@ -436,73 +72,351 @@ const AcademicLibraryDashboard = () => {
         </div>
       </motion.div>
 
-      <AcademicTabs
-        tabs={tabs}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          className="tab-content"
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          transition={{ duration: 0.3 }}
-        >
-          {renderActiveContent()}
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Pagination manuscrite */}
-      <div className="manuscript-pagination">
-        <motion.button
-          className="page-nav prev"
-          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-          disabled={currentPage === 1}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          ‹ Précédent
-        </motion.button>
-
-        <div className="page-numbers">
-          {renderPageNumbers(5)}
-        </div>
-
-        <motion.button
-          className="page-nav next"
-          onClick={() => setCurrentPage(Math.min(5, currentPage + 1))}
-          disabled={currentPage === 5}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          Suivant ›
-        </motion.button>
+      {/* Navigation */}
+      <div className="academic-navigation">
+        {[
+          { id: 'overview', label: 'Vue d\'ensemble', icon: '📚' },
+          { id: 'research', label: 'Recherche', icon: '🔍' },
+          { id: 'citations', label: 'Citations', icon: '📝' },
+          { id: 'notes', label: 'Notes', icon: '📓' },
+          { id: 'forms', label: 'Formulaires', icon: '📝' }
+        ].map((section) => (
+          <motion.button
+            key={section.id}
+            className={`nav-button ${activeSection === section.id ? 'active' : ''}`}
+            onClick={() => setActiveSection(section.id)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="nav-icon">{section.icon}</span>
+            <span className="nav-label">{section.label}</span>
+          </motion.button>
+        ))}
       </div>
 
-      {/* Éléments décoratifs anciens */}
-      <div className="library-decorations">
-        {/* Coins de page anciens */}
-        <div className="page-corners">
-          <div className="corner top-left"></div>
-          <div className="corner top-right"></div>
-          <div className="corner bottom-left"></div>
-          <div className="corner bottom-right"></div>
-        </div>
+      {/* Content */}
+      <div className="academic-content">
+        {activeSection === 'overview' && (
+          <motion.div
+            className="overview-section"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="overview-stats">
+              <div className="stat-card">
+                <div className="stat-number">{researchData.recent.length}</div>
+                <div className="stat-label">Ouvrages en cours</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">{citationsData.length}</div>
+                <div className="stat-label">Citations collectées</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">47</div>
+                <div className="stat-label">Pages lues ce mois</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">89%</div>
+                <div className="stat-label">Objectif de lecture</div>
+              </div>
+            </div>
 
-        {/* Taches d'encre */}
+            <div className="recent-activity">
+              <h3>Activité Récente</h3>
+              <div className="activity-timeline">
+                {researchData.recent.map((item, index) => (
+                  <motion.div
+                    key={item.title}
+                    className="activity-item"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="activity-icon">📖</div>
+                    <div className="activity-content">
+                      <span className="activity-title">{item.title}</span>
+                      <span className="activity-meta">
+                        {item.progress}% • {item.citations} citations • Dernière lecture: {item.lastRead}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="quick-actions">
+              <motion.button
+                className="action-button primary"
+                onClick={() => setActiveSection('research')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Continuer la lecture
+              </motion.button>
+              <motion.button
+                className="action-button secondary"
+                onClick={() => setActiveSection('forms')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Nouvelle recherche
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'research' && (
+          <motion.div
+            className="research-section"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Ouvrages de Recherche</h2>
+
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="Rechercher dans la bibliothèque..."
+                className="manuscript-input"
+              />
+            </div>
+
+            <div className="topics-section">
+              <h3>Domaines de Recherche</h3>
+              <div className="topics-cloud">
+                {researchData.topics.map((topic, index) => (
+                  <motion.div
+                    key={topic.name}
+                    className="topic-tag"
+                    style={{
+                      backgroundColor: topic.color + '20',
+                      borderColor: topic.color
+                    }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{
+                      scale: 1.1,
+                      boxShadow: `0 5px 15px ${topic.color}30`
+                    }}
+                  >
+                    {topic.name} ({topic.count})
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="books-grid">
+              {researchData.recent.map((book, index) => (
+                <motion.div
+                  key={book.title}
+                  className="book-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="book-cover">
+                    <div className="book-spine"></div>
+                    <div className="book-title">{book.title}</div>
+                    <div className="book-author">{book.author}</div>
+                  </div>
+                  <div className="book-progress">
+                    <div className="progress-bar">
+                      <motion.div
+                        className="progress-fill"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${book.progress}%` }}
+                        transition={{ duration: 1, delay: 0.2 }}
+                      />
+                    </div>
+                    <span className="progress-text">{book.progress}%</span>
+                  </div>
+                  <div className="book-meta">
+                    <span>{book.citations} citations</span>
+                    <span>Dernière lecture: {book.lastRead}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'citations' && (
+          <motion.div
+            className="citations-section"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Citations et Notes</h2>
+            <div className="citations-list">
+              {citationsData.map((citation, index) => (
+                <motion.div
+                  key={index}
+                  className="citation-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.01 }}
+                >
+                  <div className="citation-text">"{citation.text}"</div>
+                  <div className="citation-source">
+                    — {citation.author}, {citation.source}, p. {citation.page}
+                  </div>
+                  <div className="citation-category">{citation.category}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'notes' && (
+          <motion.div
+            className="notes-section"
+            initial={{ opacity: 0, rotateY: -15 }}
+            animate={{ opacity: 1, rotateY: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Notes de Recherche</h2>
+            <div className="notes-list">
+              {[
+                {
+                  title: 'Réduction phénoménologique',
+                  content: 'La réduction eidétique permet d\'accéder à l\'essence des phénomènes...',
+                  tags: ['phénoménologie', 'méthode'],
+                  date: '08/12/2024'
+                },
+                {
+                  title: 'Différence ontologique',
+                  content: 'Heidegger distingue l\'être de l\'étant...',
+                  tags: ['ontologie', 'heidegger'],
+                  date: '07/12/2024'
+                }
+              ].map((note, index) => (
+                <motion.div
+                  key={index}
+                  className="note-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <h4>{note.title}</h4>
+                  <p>{note.content}</p>
+                  <div className="note-meta">
+                    <div className="note-tags">
+                      {note.tags.map((tag, i) => (
+                        <span key={i} className="tag">#{tag}</span>
+                      ))}
+                    </div>
+                    <span className="note-date">{note.date}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {activeSection === 'forms' && (
+          <motion.div
+            className="forms-section"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2>Recherche Académique</h2>
+            <div className="forms-grid">
+              <div className="form-card">
+                <h3>Nouvelle Recherche</h3>
+                <form className="academic-form">
+                  <div className="form-group">
+                    <label>Sujet de recherche</label>
+                    <input type="text" placeholder="Ex: Phénoménologie husserlienne" />
+                  </div>
+                  <div className="form-group">
+                    <label>Domaine</label>
+                    <select>
+                      <option>Phénoménologie</option>
+                      <option>Ontologie</option>
+                      <option>Éthique</option>
+                      <option>Métaphysique</option>
+                      <option>Épistémologie</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Objectifs</label>
+                    <textarea
+                      placeholder="Décrivez les objectifs de votre recherche..."
+                      rows="3"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary">Annuler</button>
+                    <button type="submit" className="btn-primary">Commencer</button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="form-card">
+                <h3>Ajouter une Citation</h3>
+                <form className="academic-form">
+                  <div className="form-group">
+                    <label>Citation</label>
+                    <textarea
+                      placeholder="Entrez le texte de la citation..."
+                      rows="3"
+                    />
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Auteur</label>
+                      <input type="text" placeholder="Nom de l'auteur" />
+                    </div>
+                    <div className="form-group">
+                      <label>Source</label>
+                      <input type="text" placeholder="Titre de l'ouvrage" />
+                    </div>
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Page</label>
+                      <input type="number" placeholder="123" />
+                    </div>
+                    <div className="form-group">
+                      <label>Catégorie</label>
+                      <select>
+                        <option>Phénoménologie</option>
+                        <option>Ontologie</option>
+                        <option>Éthique</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="btn-secondary">Annuler</button>
+                    <button type="submit" className="btn-primary">Ajouter</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Éléments décoratifs */}
+      <div className="manuscript-elements">
         <div className="ink-spots">
-          {[...Array(8)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <motion.div
               key={i}
               className="ink-spot"
               style={{
-                left: `${15 + i * 10}%`,
-                top: `${20 + (i % 3) * 20}%`,
-                width: `${8 + Math.random() * 12}px`,
-                height: `${8 + Math.random() * 12}px`
+                left: `${15 + i * 15}%`,
+                top: `${25 + (i % 2) * 30}%`,
+                width: `${6 + Math.random() * 8}px`,
+                height: `${6 + Math.random() * 8}px`
               }}
               animate={{
                 opacity: [0.1, 0.3, 0.1],
@@ -517,7 +431,6 @@ const AcademicLibraryDashboard = () => {
           ))}
         </div>
 
-        {/* Filigranes */}
         <div className="watermarks">
           <motion.div
             className="watermark"
