@@ -32,6 +32,7 @@ const styleNames = {
 
 const AppContent = () => {
   const { currentStyle, setCurrentStyle } = useStyle();
+  const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
   const renderDashboard = () => {
     switch (currentStyle) {
@@ -68,22 +69,44 @@ const AppContent = () => {
 
   return (
     <div className="app-wrapper">
-      <div className="style-selector-container">
-        <label htmlFor="style-select" className="style-label">
-          Select Style:
-        </label>
-        <select
-          id="style-select"
-          value={currentStyle}
-          onChange={(e) => setCurrentStyle(e.target.value)}
-          className="style-select"
+      <div className={`style-selector-container ${isSelectorOpen ? 'open' : 'collapsed'}`}>
+        <button
+          className="style-toggle-btn"
+          onClick={() => setIsSelectorOpen(!isSelectorOpen)}
+          aria-label="Toggle style selector"
+          title={isSelectorOpen ? 'Collapse style selector' : 'Expand style selector'}
         >
-          {Object.entries(styleNames).map(([value, name]) => (
-            <option key={value} value={value}>
-              {name}
-            </option>
-          ))}
-        </select>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={isSelectorOpen ? 'rotated' : ''}
+          >
+            <path d="M6 9l4 4 4-4" />
+          </svg>
+        </button>
+        <div className="style-selector-content">
+          <label htmlFor="style-select" className="style-label">
+            Select Style:
+          </label>
+          <select
+            id="style-select"
+            value={currentStyle}
+            onChange={(e) => setCurrentStyle(e.target.value)}
+            className="style-select"
+          >
+            {Object.entries(styleNames).map(([value, name]) => (
+              <option key={value} value={value}>
+                {name}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       {renderDashboard()}
     </div>

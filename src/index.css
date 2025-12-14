@@ -17,3 +17,114 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* Global styles for the app wrapper */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-page, #F5F2EC); /* Default to Basic Style's page color */
+  color: var(--color-main, #111827); /* Default to Basic Style's main text color */
+  font-family: var(--font-body, 'Inter', system-ui, -apple-system, sans-serif);
+}
+
+/* Style Selector */
+.style-selector-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  max-width: 300px;
+}
+
+.style-selector-container.collapsed {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.style-selector-container.open {
+  padding: 0.5rem 1rem;
+  width: auto;
+  height: auto;
+}
+
+.style-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.style-toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.style-toggle-btn svg.rotated {
+  transform: rotate(180deg);
+}
+
+.style-selector-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: opacity 0.3s ease, max-width 0.3s ease;
+  white-space: nowrap;
+}
+
+.style-selector-container.collapsed .style-selector-content {
+  opacity: 0;
+  max-width: 0;
+  overflow: hidden;
+}
+
+.style-selector-container.open .style-selector-content {
+  opacity: 1;
+  max-width: 500px;
+}
+
+.style-label {
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.style-select {
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 0.875rem;
+  cursor: pointer;
+  appearance: none; /* Remove default select arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2rem; /* Make space for the custom arrow */
+  min-width: 150px;
+}
+
+.style-select:focus {
+  outline: none;
+  border-color: #5C0E0E; /* Burgundy focus */
+  box-shadow: 0 0 0 2px rgba(92, 14, 14, 0.2);
+}
